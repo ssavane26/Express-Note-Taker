@@ -1,11 +1,17 @@
 // exports routers to server
-const express = require('express');
+const path = require("path");
 
-const notesRouter = require('./notes')
+module.exports = function(app) {
+    
+    app.get("/", function(req, res) {
+        res.sendFile(path.join(__dirname, "/../public/index.html"));
+    });
+    
+    app.get("/notes", function(req, res) {
+        res.sendFile(path.join(__dirname, "/../public/notes.html"));
+    });
+
+    
 
 
-const app = express();
-
-app.use('/notes', notesRouter)
-
-module.exports = app;
+} 

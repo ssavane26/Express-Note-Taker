@@ -22,6 +22,13 @@ router.get('/notes', (req, res) => {
   });
 
 //DELETE ROUTE
-
+router.delete('/notes/:id', (req, res) => {
+    const noteId = req.params.id;
+    deleteNote(noteId, './db/db.json')
+      .then(() => {
+        // Respond to the DELETE request
+        res.json(`Delete Request for ${noteId} Approved`);
+      });
+  });
 
 //POST ROUTE

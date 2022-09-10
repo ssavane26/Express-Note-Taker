@@ -1,53 +1,31 @@
-const fs = require("fs");
-var data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+// const tips = require('express').Router();
+// const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
+// const { v4: uuidv4 } = require('uuid');
 
+// // GET Route for retrieving all the tips
+// tips.get('/', (req, res) => {
+//   readFromFile('./db/tips.json').then((data) => res.json(JSON.parse(data)));
+// });
 
-module.exports = function(app) {
+// // POST Route for a new UX/UI tip
+// tips.post('/', (req, res) => {
+//   console.log(req.body);
 
-    app.get("/api/notes", function(req, res) {
-       
-        res.json(data);
+//   const { username, topic, tip } = req.body;
 
-    });
+//   if (req.body) {
+//     const newTip = {
+//       username,
+//       tip,
+//       topic,
+//       tip_id: uuidv4(),
+//     };
 
-    app.get("/api/notes/:id", function(req, res) {
+//     readAndAppend(newTip, './db/tips.json');
+//     res.json(`Tip added successfully 🚀`);
+//   } else {
+//     res.error('Error in adding tip');
+//   }
+// });
 
-        res.json(data[Number(req.params.id)]);
-
-    });
-
-
-    app.post("/api/notes", function(req, res) {
-
-        let newNote = req.body;
-        let uniqueId = (data.length).toString();
-        console.log(uniqueId);
-        newNote.id = uniqueId;
-        data.push(newNote);
-        
-        fs.writeFileSync("./db/db.json", JSON.stringify(data), function(err) {
-            if (err) throw (err);        
-        }); 
-
-        res.json(data);    
-
-    });
-
-    
-    app.delete("/api/notes/:id", function(req, res) {
-
-        let noteId = req.params.id;
-        let newId = 0;
-        console.log(`Deleting note with id ${noteId}`);
-        data = data.filter(currentNote => {
-           return currentNote.id != noteId;
-        });
-        for (currentNote of data) {
-            currentNote.id = newId.toString();
-            newId++;
-        }
-        fs.writeFileSync("./db/db.json", JSON.stringify(data));
-        res.json(data);
-    }); 
-
-}
+// module.exports = tips;

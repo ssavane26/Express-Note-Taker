@@ -1,11 +1,8 @@
 // Using this Script File to export routers to server
-const express = require('express');
+const router = require('express').Router();
 
-const notesRouter = require('./notes')
+const apiRouter = require('./api');
 
+router.use('/api', apiRouter);
 
-const app = express();
-
-app.use('/notes', notesRouter)
-
-module.exports = app;
+module.exports = router;

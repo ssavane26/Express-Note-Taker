@@ -1,7 +1,7 @@
 // Initating Express and Routers
 const router = require('express').Router();
-const { readFromFile, readAndAppend, deleteNote } = require('../helpers/fsUtils');
-const uuid = require('../helpers/uuid');
+const {readFromFile, writeToFile, readAndAppend} = require('../helpers/fsUtils');
+const {v4: uuidv4} = require('uuid');
 
 //GET ROUTES
 router.get('/notes', (req, res) => {
@@ -25,11 +25,13 @@ router.get('/notes', (req, res) => {
 //DELETE ROUTE
 router.delete('/notes/:id', (req, res) => {
     const noteId = req.params.id;
-    deleteNote(noteId, './db/db.json')
-      .then(() => {
-        // Respond to the DELETE request
-        res.json(`Delete Request for ${noteId} Approved`);
-      });
+   readFromFile('./db/db.json')
+      .then((data) => JSON.parse(data))
+      .then ((json) => {
+        const result = json.filter((note) => note.id !== noteId);
+        writeToFile('./db/db.json', result);
+        res.json (`note ${noteId} was deleted!`)
+      })
   });
 
 //POST ROUTE
@@ -43,11 +45,11 @@ router.post('/notes', (req, res) => {
       const newNote = {
         title,
         text,
-        id: uuid(),
+        id: uuidv4(),
       };
   
       readAndAppend(newNote, './db/db.json');
-      res.json(`Note added successfully 🚀`);
+      res.json(newNote);
     } else {
       res.error('Error! Unable to post note');
     }
